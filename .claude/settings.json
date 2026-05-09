@@ -1,0 +1,73 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash:./scripts/*",
+      "Bash:git *",
+      "Bash:python *",
+      "Bash:node *",
+      "Bash:npm *",
+      "Bash:yarn *",
+      "Bash:pnpm *",
+      "Bash:pytest *",
+      "Bash:black *",
+      "Bash:prettier *",
+      "Bash:eslint *",
+      "Bash:flake8 *",
+      "Bash:mypy *",
+      "Bash:tsc *",
+      "Read:./**",
+      "Edit:./**",
+      "Write:./**"
+    ],
+    "deny": [
+      "Write:**/.env*",
+      "Write:**/package-lock.json",
+      "Write:**/yarn.lock",
+      "Write:**/pnpm-lock.yaml",
+      "Write:**/.git/**",
+      "Write:**/node_modules/**",
+      "Bash:rm -rf /**",
+      "Bash:sudo *",
+      "Bash:curl *|*sh*",
+      "Bash:wget *|*sh*"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "command": ".claude/hooks/security-scan.sh"
+      },
+      {
+        "matcher": "Edit|Write",
+        "command": ".claude/hooks/format-code.sh"
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "command": ".claude/hooks/run-tests.sh"
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "command": "echo 'Session started. Project: Prism'"
+      }
+    ]
+  },
+  "sandbox": {
+    "enabled": true,
+    "allowNetwork": true,
+    "allowFilesystem": true,
+    "readonlyPaths": [
+      ".git/",
+      "node_modules/"
+    ]
+  },
+  "env": {
+    "PRISM_ENV": "development",
+    "PYTHONPATH": ".",
+    "NODE_ENV": "development"
+  }
+}
