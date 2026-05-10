@@ -15,6 +15,24 @@
       "Bash:flake8 *",
       "Bash:mypy *",
       "Bash:tsc *",
+      "Bash:shellcheck *",
+      "Bash:shfmt *",
+      "Bash:ruff *",
+      "Bash:cat",
+      "Bash:echo",
+      "Bash:mkdir",
+      "Bash:cp",
+      "Bash:mv",
+      "Bash:touch",
+      "Bash:ls",
+      "Bash:find",
+      "Bash:grep",
+      "Bash:head",
+      "Bash:tail",
+      "Bash:wc",
+      "Bash:sort",
+      "Bash:uniq",
+      "Bash:jq",
       "Read:./**",
       "Edit:./**",
       "Write:./**"
@@ -26,10 +44,15 @@
       "Write:**/pnpm-lock.yaml",
       "Write:**/.git/**",
       "Write:**/node_modules/**",
+      "Write:**/.claude/settings.json",
       "Bash:rm -rf /**",
       "Bash:sudo *",
       "Bash:curl *|*sh*",
-      "Bash:wget *|*sh*"
+      "Bash:wget *|*sh*",
+      "Bash:eval *",
+      "Bash:exec *",
+      "Bash:bash -c *",
+      "Bash:sh -c *"
     ]
   },
   "hooks": {
@@ -52,9 +75,19 @@
     "SessionStart": [
       {
         "matcher": "*",
-        "command": "echo 'Session started. Project: Prism'"
+        "command": "echo '[Prism] Session started. Run ./scripts/validate.sh to verify harness.'"
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "command": "echo '[Prism] Session ended.'"
       }
     ]
+  },
+  "attribution": {
+    "commit": "",
+    "pullRequest": ""
   },
   "sandbox": {
     "enabled": true,

@@ -1,0 +1,63 @@
+# Dependencies
+node_modules/
+vendor/
+__pycache__/
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Build artifacts
+dist/
+build/
+*.pyc
+*.pyo
+*.class
+*.o
+*.so
+*.dylib
+
+# Lock files (managed by CI)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Environment & secrets
+.env
+.env.*
+.env.local
+.env.development
+.env.production
+*.pem
+*.key
+secrets/
+credentials/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+coverage/
+.nyc_output/
+.pytest_cache/
+htmlcov/
+
+# Claude Code
+.claude/.cache/
+.claude/output/
+
+# OS
+.DS_Store
+Thumbs.db

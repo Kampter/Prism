@@ -1,6 +1,8 @@
 #!/bin/bash
 # Security Scan Hook — PreToolUse (Edit|Write)
 # Blocks commits containing secrets, credentials, or dangerous patterns
+# Receives: JSON on stdin describing the tool call
+# Exits 0 = allow, non-zero = block
 
 set -euo pipefail
 
@@ -14,36 +16,37 @@ BLOCKED_PATTERNS=(
   'private[_-]?key\s*[:=]'
   'AWS_ACCESS_KEY_ID\s*='
   'AWS_SECRET_ACCESS_KEY\s*='
+  'ghp_[a-zA-Z0-9]{36}'
+  'sk-[a-zA-Z0-9]{48}'
   # Dangerous functions
-  'eval\s*\('
-  'exec\s*\('
+  '\beval\s*\('
+  '\bexec\s*\('
   'os\.system\s*\('
   'subprocess\.call\s*\([^)]*shell\s*=\s*True'
   # SQL injection risks
-  'execute\s*\(["\047].*%s'
-  'query\s*\(["\047].*\+'
+  '\.execute\s*\(["\047].*%s'
+  '\.query\s*\(["\047].*\+'
+  'f["\047].*\{.*\}.*["\047]\s*\.format'
+  # Path traversal
+  '\.\.(/|\\\\)'
 )
 
-# Get the file being edited from stdin (Claude Code passes JSON)
-# If stdin is empty, skip (hook called without context)
+# If stdin is empty or terminal, skip scan (no file context available)
 if [ -t 0 ]; then
   exit 0
 fi
 
-INPUT=$(cat)
-FILE_PATH=$(echo "$INPUT" | grep -o '"file"[^}]*' | head -1 || true)
-
-# If we can't determine file, allow but log
-if [ -z "$FILE_PATH" ]; then
-  echo "Warning: security scan could not determine target file"
+# Read stdin safely
+INPUT=$(cat) || true
+if [ -z "$INPUT" ]; then
   exit 0
 fi
 
 # Check for blocked patterns in the tool input
 for pattern in "${BLOCKED_PATTERNS[@]}"; do
-  if echo "$INPUT" | grep -qiE "$pattern"; then
-    echo "SECURITY BLOCK: Detected dangerous pattern matching '$pattern'"
-    echo "This write has been blocked. Please use environment variables for secrets."
+  if echo "$INPUT" | grep -qiE "$pattern" 2>/dev/null; then
+    echo "SECURITY BLOCK: Detected dangerous pattern matching '$pattern'" >&2
+    echo "This write has been blocked. Secrets must use environment variables." >&2
     exit 1
   fi
 done
