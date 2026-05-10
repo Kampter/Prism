@@ -59,29 +59,39 @@
     "PreToolUse": [
       {
         "matcher": "Edit|Write",
-        "command": ".claude/hooks/security-scan.sh"
+        "hooks": [
+          {"type": "command", "command": ".claude/hooks/security-scan.sh"}
+        ]
       },
       {
         "matcher": "Edit|Write",
-        "command": ".claude/hooks/format-code.sh"
+        "hooks": [
+          {"type": "command", "command": ".claude/hooks/format-code.sh"}
+        ]
       }
     ],
     "PostToolUse": [
       {
         "matcher": "Edit|Write",
-        "command": ".claude/hooks/run-tests.sh"
+        "hooks": [
+          {"type": "command", "command": ".claude/hooks/run-tests.sh"}
+        ]
       }
     ],
     "SessionStart": [
       {
-        "matcher": "*",
-        "command": "echo '[Prism] Session started. Run ./scripts/validate.sh to verify harness.'"
+        "matcher": "",
+        "hooks": [
+          {"type": "command", "command": "echo '[Prism] Session started. Run ./scripts/validate.sh to verify harness.'"}
+        ]
       }
     ],
     "Stop": [
       {
-        "matcher": "*",
-        "command": "echo '[Prism] Session ended.'"
+        "matcher": "",
+        "hooks": [
+          {"type": "command", "command": "echo '[Prism] Session ended.'"}
+        ]
       }
     ]
   },

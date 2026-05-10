@@ -38,7 +38,7 @@ if [ -f .claude/settings.json ]; then
 fi
 
 # Check for required tools
-for tool in git python3 node npm; do
+for tool in git python3 uv node pnpm; do
   if command -v "$tool" >/dev/null 2>&1; then
     echo "  [OK] $tool"
   else

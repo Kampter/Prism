@@ -1,0 +1,10 @@
+{
+  "name": "database",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "migrate": "echo 'run migrations'",
+    "seed": "echo 'run seeds'",
+    "studio": "echo 'open db studio'"
+  }
+}
